@@ -25,9 +25,9 @@ func OpenTelemetryMiddleware(h message.HandlerFunc) message.HandlerFunc {
 	// Setup metrics
 	meter := global.Meter("watermill")
 	offsetTracker := metric.Must(meter).NewInt64UpDownCounter("watermill_kafka_subscriber_offset")
-	subLagTracker := metric.Must(meter).NewInt64ValueRecorder("watermill_kafka_subscriber_lag_ms")
-	publishTracker := metric.Must(meter).NewInt64ValueRecorder("watermill_kafka_publish_ms")
-	processingTracker := metric.Must(meter).NewInt64ValueRecorder("watermill_processing_ms")
+	subLagTracker := metric.Must(meter).NewInt64Histogram("watermill_kafka_subscriber_lag_ms")
+	publishTracker := metric.Must(meter).NewInt64Histogram("watermill_kafka_publish_ms")
+	processingTracker := metric.Must(meter).NewInt64Histogram("watermill_processing_ms")
 
 	return func(msg *message.Message) ([]*message.Message, error) {
 		ctx := msg.Context()
